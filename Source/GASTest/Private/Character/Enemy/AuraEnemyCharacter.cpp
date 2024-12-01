@@ -3,7 +3,17 @@
 
 #include "Character/Enemy/AuraEnemyCharacter.h"
 
+#include "AbilitySystem/AuraAttributeSet.h"
 #include "GASTest/GASTest.h"
+
+AAuraEnemyCharacter::AAuraEnemyCharacter()
+{
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent -> SetIsReplicated(true);
+
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
+}
 
 void AAuraEnemyCharacter::HighLightActor()
 {
