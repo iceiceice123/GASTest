@@ -40,6 +40,7 @@ class GASTEST_API UAuraWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllorParams(const FMWidgetControllerParams WCParams);
+	virtual void BroadcastInitialValues();
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetControllor")
     TObjectPtr<APlayerController> PlayerControllor;	
@@ -51,5 +52,5 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;	
 	
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetControllor")
-	TObjectPtr<UAttributeSet> AttributeSets;
+	TObjectPtr<UAttributeSet> AttributeSet;
 };
