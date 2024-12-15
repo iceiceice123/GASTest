@@ -19,10 +19,14 @@ class GASTEST_API UOverlayWidgetController : public UAuraWidgetController
 	
 public:
 	virtual void BroadcastInitialValues() override;
+	virtual void BindCallBackToDependenies() override;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
 	FOnHealthChangedSignature OnHealthChanged;
 
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
 	FOnMaxHealthChangedSignature OnMaxHealthChanged;
+
+	void HealthChanged(const FOnAttributeChangeData& Data);
+	void MaxHealthChanged(const FOnAttributeChangeData& Data);
 };
