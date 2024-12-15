@@ -6,8 +6,15 @@
 #include "UI/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature,    float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewmaxHealth);
+//Can we just use one delegate to implement this?
+//Yes
+
+//Where is listening
+//In the blueprint
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature,      float, NewHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature,   float, NewMaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnManaChangedSignature,	    float, NewMana);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxManaChangedSignature,		float, NewMaxMana);
 
 /**
  * 
@@ -27,6 +34,14 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
 	FOnMaxHealthChangedSignature OnMaxHealthChanged;
 
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
+	FOnManaChangedSignature OnManaChanged;
+
+	UPROPERTY(BlueprintAssignable, Category="GAS|Attribute")
+	FOnMaxManaChangedSignature OnMaxManaChanged;
+
 	void HealthChanged(const FOnAttributeChangeData& Data);
 	void MaxHealthChanged(const FOnAttributeChangeData& Data);
+	void ManaChanged(const FOnAttributeChangeData& Data);
+	void MaxManaChanged(const FOnAttributeChangeData& Data);
 };
