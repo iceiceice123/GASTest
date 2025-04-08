@@ -40,8 +40,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplayEffect> GamePlayEffectClass);
 
+	UFUNCTION(BlueprintCallable)
 	void OnOverlap(AActor* OverlappedActor);
 	
+	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* OverlappedActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
@@ -64,4 +66,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	EffectRemovePolicy InfinityGamePlayEffectRemovePolicy = EffectRemovePolicy::DoNotRemove;
+
+	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent* > ActiveGEHandleToASCMap;
 };
