@@ -80,6 +80,8 @@ void AAuraEffectActor::OnEndOverlap(AActor* OverlappedActor)
 		if (!IsValid(TargetASC)) return;
 
 		TArray<FActiveGameplayEffectHandle> HandlesToRemove;
+		
+		// 先收集需要移除的Handle
 		for (auto HandlePair : ActiveGEHandleToASCMap) 
 		{
 			if (TargetASC == HandlePair.Value) 
@@ -87,15 +89,12 @@ void AAuraEffectActor::OnEndOverlap(AActor* OverlappedActor)
 				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key);
 				HandlesToRemove.Add(HandlePair.Key);
 			}
-
-			for (auto& Handle : HandlesToRemove) 
-			{
-				ActiveGEHandleToASCMap.FindAndRemoveChecked(Handle);
-			}
+		}
+		
+		// 在遍历结束后再移除元素
+		for (auto& Handle : HandlesToRemove) 
+		{
+			ActiveGEHandleToASCMap.FindAndRemoveChecked(Handle);
 		}
 	}
 }
-
-
-
-
