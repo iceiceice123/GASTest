@@ -68,4 +68,7 @@ protected:
 	EffectRemovePolicy InfinityGamePlayEffectRemovePolicy = EffectRemovePolicy::DoNotRemove;
 
 	TMap<FActiveGameplayEffectHandle, UAbilitySystemComponent* > ActiveGEHandleToASCMap;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	float ActorLevel = 1;
 };

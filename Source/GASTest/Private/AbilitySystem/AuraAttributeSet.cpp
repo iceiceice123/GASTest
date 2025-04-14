@@ -2,9 +2,11 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
-
 #include "AbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "GameplayEffectExtension.h"
+#include "GameFramework/Character.h"
+
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -49,6 +51,46 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	}
 }
 
+void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+
+	FEffectProperties Props;
+	SetEffectProperties(Data, Props);
+}
+
+void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
+{
+	Props.EffectContextHandle = Data.EffectSpec.GetContext();
+	Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+
+	if (IsValid(Props.SourceASC) && Props.SourceASC->AbilityActorInfo.IsValid() && Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		Props.SourceActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
+		Props.SourceControllor = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
+		if (Props.SourceControllor == nullptr && Props.SourceActor != nullptr) 
+		{
+			if (const APawn* Pawn = Cast<APawn>(Props.SourceActor))
+			{
+				Props.SourceControllor = Pawn->GetController();
+			}
+		}
+
+		if (Props.SourceControllor != nullptr)
+		{
+			Props.SourceCharacter = Cast<ACharacter>(Props.SourceControllor->GetPawn());
+		}
+	}
+
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid()) 
+	{
+		Props.TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+		Props.TargetControllor = Data.Target.AbilityActorInfo->PlayerController.Get();
+		Props.TargetCharacter = Cast<ACharacter>(Props.TargetActor);
+		Props.TargetASC = Data.Target.AbilityActorInfo->AbilitySystemComponent.Get();
+	}
+}
+
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, Health, OldHealth);
@@ -68,4 +110,7 @@ void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) 
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
 }
+
+
+
 

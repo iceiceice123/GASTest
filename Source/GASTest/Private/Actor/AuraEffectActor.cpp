@@ -2,7 +2,6 @@
 
 
 #include "Actor/AuraEffectActor.h"
-
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
@@ -12,7 +11,6 @@
 // Sets default values
 AAuraEffectActor::AAuraEffectActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SetRootComponent(CreateDefaultSubobject<USceneComponent>("SceneRoot"));
@@ -32,7 +30,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* Target, TSubclassOf<UGameplay
 	check(GamePlayEffectClass);
 	FGameplayEffectContextHandle ContextHandle =  TargetASC->MakeEffectContext();
 	ContextHandle.AddSourceObject(this);
-	const FGameplayEffectSpecHandle GameplayEffectSpecHandle = TargetASC->MakeOutgoingSpec(GamePlayEffectClass, 1.f, ContextHandle);
+	const FGameplayEffectSpecHandle GameplayEffectSpecHandle = TargetASC->MakeOutgoingSpec(GamePlayEffectClass, ActorLevel, ContextHandle);
 	const FActiveGameplayEffectHandle ActiveGEHandle =  TargetASC->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data.Get());
 
 	const bool isInfinite = GameplayEffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
